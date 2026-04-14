@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2DoList — Futuristic Task Manager</title>
+  <meta name="description" content="Futuristik, modern ve kullanıcı dostu görev yönetim uygulaması. Kategori ve deadline takibi ile görevlerinizi yönetin." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── ARKAPLAN KATMANI ── -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="grid-overlay"></div>
+    <div class="scanline"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- ── ANA UYGULAMA ── -->
+  <main class="app" role="main">
+
+    <!-- HEADER -->
+    <header class="hdr">
+      <div class="hdr-brand">
+        <div class="brand-icon" aria-hidden="true">
+          <span class="brand-icon-inner">2D</span>
+          <div class="brand-ring"></div>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-name">2DoList</h1>
+          <p class="brand-tagline">// görev yönetim sistemi v2.0</p>
+        </div>
+      </div>
+      <div class="hdr-right">
+        <!-- Canlı saat -->
+        <div class="live-clock" id="liveClock" aria-label="Güncel saat"></div>
+        <!-- Tema toggle -->
+        <button class="icon-btn" id="themeToggle" aria-label="Tema değiştir" title="Tema değiştir">
+          <span id="themeIcon">☀️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- STATS BAR -->
+    <section class="stats-bar" aria-label="Görev istatistikleri">
+      <div class="stat-pill">
+        <span class="stat-dot dot-all"></span>
+        <span class="mono" id="stTotal">0</span>
+        <span class="stat-lbl">toplam</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-dot dot-active"></span>
+        <span class="mono" id="stActive">0</span>
+        <span class="stat-lbl">bekliyor</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-dot dot-done"></span>
+        <span class="mono" id="stDone">0</span>
+        <span class="stat-lbl">tamamlandı</span>
+      </div>
+      <div class="stat-pill urgent-pill">
+        <span class="stat-dot dot-urgent"></span>
+        <span class="mono" id="stUrgent">0</span>
+        <span class="stat-lbl">acil</span>
+      </div>
+      <div class="progress-pill">
+        <div class="progress-numbers">
+          <span class="mono" id="progPct">0%</span>
+        </div>
+        <div class="prog-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progBar">
+          <div class="prog-fill" id="progFill"></div>
+          <div class="prog-glow" id="progGlow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADD FORM -->
+    <section class="add-panel" aria-label="Yeni görev ekle">
+      <div class="panel-label" aria-hidden="true">// yeni görev</div>
+      <div class="add-row-1">
+        <div class="field-wrap field-task">
+          <span class="field-icon">›</span>
+          <input
+            type="text"
+            id="taskInput"
+            class="field-input"
+            placeholder="Görev tanımı girin..."
+            maxlength="120"
+            autocomplete="off"
+            aria-label="Görev metni"
+          />
+        </div>
+        <button id="addBtn" class="add-btn" aria-label="Görev ekle">
+          <span class="add-btn-icon">+</span>
+          <span>EKLE</span>
+        </button>
+      </div>
+      <div class="add-row-2">
+        <!-- Kategori -->
+        <div class="select-wrap">
+          <label class="select-label" for="categorySelect">KATEGORİ</label>
+          <select id="categorySelect" class="field-select" aria-label="Kategori">
+            <option value="genel">📌 Genel</option>
+            <option value="is">💼 İş</option>
+            <option value="kisisel">👤 Kişisel</option>
+            <option value="egitim">📚 Eğitim</option>
+            <option value="saglik">💪 Sağlık</option>
+          </select>
+        </div>
+        <!-- Öncelik -->
+        <div class="select-wrap">
+          <label class="select-label" for="prioritySelect">ÖNCELİK</label>
+          <select id="prioritySelect" class="field-select" aria-label="Öncelik">
+            <option value="low">🟢 Düşük</option>
+            <option value="medium" selected>🟡 Orta</option>
+            <option value="high">🔴 Yüksek</option>
+          </select>
+        </div>
+        <!-- Deadline -->
+        <div class="select-wrap">
+          <label class="select-label" for="deadlineInput">SON TARİH</label>
+          <input
+            type="date"
+            id="deadlineInput"
+            class="field-select field-date"
+            aria-label="Son tarih"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- FİLTRE PANELI -->
+    <section class="filter-panel" aria-label="Filtreler">
+      <!-- Durum filtreleri -->
+      <div class="filter-group" role="tablist" aria-label="Durum filtresi">
+        <span class="filter-group-label">DURUM</span>
+        <button class="ftab ftab-status active" data-status="all"   role="tab" aria-selected="true">Tümü</button>
+        <button class="ftab ftab-status"         data-status="active" role="tab" aria-selected="false">Bekliyor</button>
+        <button class="ftab ftab-status"         data-status="done"   role="tab" aria-selected="false">Tamamlandı</button>
+      </div>
+      <!-- Kategori filtreleri -->
+      <div class="filter-group" role="tablist" aria-label="Kategori filtresi">
+        <span class="filter-group-label">KATEGORİ</span>
+        <button class="ftab ftab-cat active" data-cat="all"     role="tab" aria-selected="true">Tümü</button>
+        <button class="ftab ftab-cat cat-is"      data-cat="is"      role="tab" aria-selected="false">💼 İş</button>
+        <button class="ftab ftab-cat cat-kisisel" data-cat="kisisel" role="tab" aria-selected="false">👤 Kişisel</button>
+        <button class="ftab ftab-cat cat-egitim"  data-cat="egitim"  role="tab" aria-selected="false">📚 Eğitim</button>
+        <button class="ftab ftab-cat cat-saglik"  data-cat="saglik"  role="tab" aria-selected="false">💪 Sağlık</button>
+        <button class="ftab ftab-cat cat-genel"   data-cat="genel"   role="tab" aria-selected="false">📌 Genel</button>
+      </div>
+      <!-- Temizle -->
+      <button class="clear-btn" id="clearDone" title="Tamamlananları temizle">⌫ Temizle</button>
+    </section>
+
+    <!-- GÖREV LİSTESİ -->
+    <section class="list-section" aria-label="Görev listesi">
+      <ul id="taskList" class="task-list" role="list"></ul>
+
+      <!-- BOŞ DURUM -->
+      <div id="emptyState" class="empty-state" aria-live="polite">
+        <div class="empty-visual" aria-hidden="true">
+          <svg width="140" height="140" viewBox="0 0 140 140" fill="none">
+            <!-- Dış halka -->
+            <circle cx="70" cy="70" r="60" stroke="url(#eg1)" stroke-width="1" stroke-dasharray="6 4" opacity="0.4"/>
+            <!-- İç halka -->
+            <circle cx="70" cy="70" r="40" stroke="url(#eg1)" stroke-width="1" opacity="0.3"/>
+            <!-- Merkez nokta -->
+            <circle cx="70" cy="70" r="6" fill="url(#eg1)" opacity="0.8"/>
+            <!-- Çizgiler -->
+            <rect x="46" y="54" width="48" height="4" rx="2" fill="url(#eg1)" opacity="0.35"/>
+            <rect x="46" y="66" width="36" height="4" rx="2" fill="url(#eg1)" opacity="0.25"/>
+            <rect x="46" y="78" width="24" height="4" rx="2" fill="url(#eg1)" opacity="0.15"/>
+            <!-- Checkmark dairesi -->
+            <circle cx="98" cy="44" r="16" fill="url(#eg2)" opacity="0.85"/>
+            <path d="M91 44l5 5 10-10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="eg1" x1="10" y1="10" x2="130" y2="130" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00d4ff"/>
+                <stop offset="1" stop-color="#b347ff"/>
+              </linearGradient>
+              <linearGradient id="eg2" x1="82" y1="28" x2="114" y2="60" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00d4ff"/>
+                <stop offset="1" stop-color="#b347ff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <p class="empty-headline">// LİSTE BOŞ</p>
+        <p class="empty-sub">Yukarıdaki forma görev girerek sistemi başlatın.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
