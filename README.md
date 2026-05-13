@@ -9,6 +9,13 @@ Uygulama boy bilgisini **metre** cinsinden bekler ve şu sınırlarla doğrulama
 - Boy: `0 < boy <= 2.5` metre
 - Kilo: `0 < kilo <= 400` kilogram
 
+Program açıldığında `BMI Hesaplayici` başlığını gösterir, önce boy sonra kilo ister.
+Hatalı girişte program kapanmaz; ilgili alanı yeniden ister.
+BMI hesaplamasından sonra kullanıcıya devam/çıkış seçeneği sunar:
+
+- `1`: Yeni hesaplama
+- `2`: `Hosca kal` mesajı ile çıkış
+
 ### Derleme
 
 ```bash
