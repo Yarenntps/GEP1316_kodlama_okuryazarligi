@@ -46,9 +46,9 @@ int main() {
     // BMI kategorisini belirle ve kullanıcıyı bilgilendir.
     if (bmi < 18.5) {
         std::cout << "Kategori: Zayif\n";
-    } else if (bmi <= 24.9) {
+    } else if (bmi < 25.0) {
         std::cout << "Kategori: Normal\n";
-    } else if (bmi <= 29.9) {
+    } else if (bmi < 30.0) {
         std::cout << "Kategori: Fazla kilolu\n";
     } else {
         std::cout << "Kategori: Obez\n";
