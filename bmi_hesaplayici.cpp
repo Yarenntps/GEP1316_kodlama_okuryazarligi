@@ -6,7 +6,7 @@ int main() {
     const double MAX_BOY_METRE = 2.5;
     const double MAX_KILO_KG = 400.0;
 
-    std::cout << "BMI Hesaplayici\n";
+    std::cout << "|BMI Hesaplayici|\n";
     std::cout << std::fixed << std::setprecision(2);
 
     while (true) {
@@ -95,7 +95,7 @@ int main() {
             }
 
             if (secim == 2) {
-                std::cout << "Hosca kal\n";
+                std::cout << "Hosca kalin <3 !\n";
                 return 0;
             }
 
