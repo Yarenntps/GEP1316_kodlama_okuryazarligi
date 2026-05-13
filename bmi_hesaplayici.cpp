@@ -4,6 +4,8 @@
 int main() {
     double boy = 0.0;
     double kilo = 0.0;
+    const double MAX_BOY_METRE = 2.5;
+    const double MAX_KILO_KG = 400.0;
 
     // Kullanıcıdan boy bilgisini metre cinsinden al.
     std::cout << "Boyunuzu metre cinsinden girin (örnek: 1.75): ";
@@ -21,6 +23,13 @@ int main() {
         return 1;
     }
 
+    // Boyun metre cinsinden ve makul aralıkta girildiğini kontrol et.
+    if (boy > MAX_BOY_METRE) {
+        std::cout << "Hata: Boy metre cinsinden girilmeli ve " << MAX_BOY_METRE
+                  << " metreden büyük olmamalıdır (cm girdiyseniz metreye çevirin).\n";
+        return 1;
+    }
+
     // Kullanıcıdan kilo bilgisini kilogram cinsinden al.
     std::cout << "Kilonuzu kilogram cinsinden girin (örnek: 68): ";
     std::cin >> kilo;
@@ -34,6 +43,12 @@ int main() {
     // Pozitif ve mantıklı değer kontrolü.
     if (kilo <= 0.0) {
         std::cout << "Hata: Kilo 0'dan büyük olmalıdır.\n";
+        return 1;
+    }
+
+    // Kilonun makul bir üst sınırı aşmadığını kontrol et.
+    if (kilo > MAX_KILO_KG) {
+        std::cout << "Hata: Kilo " << MAX_KILO_KG << " kg'dan büyük olmamalıdır.\n";
         return 1;
     }
 
