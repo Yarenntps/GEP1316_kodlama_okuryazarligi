@@ -1,16 +1,19 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <cctype>
 
 using namespace std;
 
 // Fonksiyon: Kullanci girdisini kontrol et ve geçerli bir double degerini geri döndür
 // Parametre: sahaLabel - sahanin adi (örn: "Boy", "Kilo")
+// Parametre: isHeight - boy bilgisi mi kontrol ediliyor (varsayilan: false)
 // Parametre: maxDenemeSayisi - maksimum deneme sayisi (default: 3)
 // Dönüş: geçerli bir pozitif double degeri
-double getValidInput(const string &sahaLabel, int maxDenemeSayisi = 3)
+double getValidInput(const string &sahaLabel, bool isHeight = false, int maxDenemeSayisi = 3)
 {
     double deger;
+    char nextChar;
     int denemeSayisi = 0;
 
     while (denemeSayisi < maxDenemeSayisi)
@@ -26,10 +29,24 @@ double getValidInput(const string &sahaLabel, int maxDenemeSayisi = 3)
             cout << "HATA: Geçerli bir sayı giriniz!\n";
             denemeSayisi++;
         }
+        // Eger sonra hala alfanumerik karakter varsa (örn: "123abc")
+        else if (cin.get(nextChar) && nextChar != '\n' && !isspace(nextChar))
+        {
+            cin.ignore(10000, '\n'); // Kalan karakterleri temizle
+            cout << "HATA: Geçerli bir sayı giriniz! Ekstra karakterler tespit edildi.\n";
+            denemeSayisi++;
+        }
         // Eger sayi sifir veya negatif ise
         else if (deger <= 0)
         {
             cout << "HATA: " << sahaLabel << " pozitif bir sayi olmali!\n";
+            denemeSayisi++;
+        }
+        // Eger boy ise, metre cinsinden olup olmadigini kontrol et (0.5 - 3.0 metre arasi)
+        else if (isHeight && (deger < 0.5 || deger > 3.0))
+        {
+            cout << "HATA: Boy metre cinsinden girilmeli (0.5m - 3.0m arası).\n";
+            cout << "      (Örneğin 175 cm yerine 1.75 m olarak giriniz)\n";
             denemeSayisi++;
         }
         else
@@ -74,8 +91,8 @@ int main()
     cout << "=================================\n\n";
 
     // Boy ve kilo bilgilerini al
-    double boy = getValidInput("Boy (metre cinsinden)", 3);
-    double kilo = getValidInput("Kilo (kilogram cinsinden)", 3);
+    double boy = getValidInput("Boy (metre cinsinden)", true, 3);
+    double kilo = getValidInput("Kilo (kilogram cinsinden)", false, 3);
 
     // VKI hesapla
     double vki = kilo / (boy * boy);
